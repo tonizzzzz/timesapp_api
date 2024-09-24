@@ -13,7 +13,7 @@ class UpdateDepartmentManagerSeeder extends Seeder
     public function run(): void
     {
         // Asignar manager a los departamentos
-        DB::table('departments')->where('name', 'Software')->update(['manager_id' => 1]); // user1
+        DB::table('departments')->where('name', 'Software')->update(['manager_id' => 11]); // user1
         DB::table('departments')->where('name', 'Sistemas')->update(['manager_id' => 4]); // user4
         DB::table('departments')->where('name', 'Business Intelligence')->update(['manager_id' => 7]); // user7
     }

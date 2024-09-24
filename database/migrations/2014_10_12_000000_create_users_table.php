@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->unsignedBigInteger('department_id')->nullable();
-            $table->enum('role', ['employee', 'manager'])->default('employee');
+            $table->enum('role', ['admin', 'hr', 'employee'])->default('employee');
             $table->timestamps();
         });
     }

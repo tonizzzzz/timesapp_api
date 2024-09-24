@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -54,14 +55,22 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+            return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json(['token' => $token]);
+        // Buscar si el usuario es manager de algún departamento
+        $managerDepartment = DB::table('departments')
+            ->where('manager_id', $user->id)
+            ->first();
+
+        return response()->json([
+            'name' => $user->name,
+            'token' => $token,
+            'role' => $user->role,
+            'manager_department_id' => $managerDepartment ? $user->id : null,
+        ]);
     }
 
     public function logout()
